@@ -1,5 +1,4 @@
 ﻿using Autofac.Builder;
-using Autofac.Core.Resolving;
 using UnityEngine;
 
 namespace Autofac.Unity
@@ -7,7 +6,7 @@ namespace Autofac.Unity
     public static class Extensions
     {
         public static ILifetimeScope GetScope(this IComponentContext context) =>
-            (context as IInstanceLookup)?.ActivationScope;
+           context.Resolve<ILifetimeScope>();
 
         public static GameObject GetGameObject(this IComponentContext context) =>
             context.GetScope()?.Tag as GameObject;
