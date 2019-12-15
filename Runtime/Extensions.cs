@@ -19,6 +19,6 @@ namespace Autofac.Unity
             builder.Register(x => x.ResolveFromGameObject<T>());
 
         public static IRegistrationBuilder<T, SimpleActivatorData, SingleRegistrationStyle> RegisterTypeFromScene<T>(this ContainerBuilder builder) where T : Object =>
-           builder.Register(x => Object.FindObjectOfType<T>());
+           builder.Register(x => Object.FindObjectOfType<T>()).InstancePerLifetimeScope();
     }
 }

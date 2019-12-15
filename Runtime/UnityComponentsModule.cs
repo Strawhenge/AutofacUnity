@@ -7,10 +7,15 @@ namespace Autofac.Unity
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterTypeFromGameObject<Animator>().AsSelf();
+            builder
+                .Register(x => x.GetGameObject())
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
             builder.RegisterTypeFromGameObject<Transform>().AsSelf();
-            builder.RegisterTypeFromGameObject<NavMeshAgent>().AsSelf();
             builder.RegisterTypeFromGameObject<Rigidbody>().AsSelf();
+            builder.RegisterTypeFromGameObject<Animator>().AsSelf();
+            builder.RegisterTypeFromGameObject<NavMeshAgent>().AsSelf();
 
             base.Load(builder);
         }

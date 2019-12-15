@@ -16,7 +16,7 @@ namespace Autofac.Unity
             foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
             {
                 Log($"injecting properties for {monoBehaviour}");
-                scope.InjectProperties(monoBehaviour);
+                scope.InjectUnsetProperties(monoBehaviour);
             }
         }
 
