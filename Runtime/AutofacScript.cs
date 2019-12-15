@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Autofac.Unity
 {
@@ -29,13 +30,20 @@ namespace Autofac.Unity
         private void Awake()
         {
             container = AutofacUnity.Container;
-            
+
             var gameObjects = gameObject.scene.GetRootGameObjects();
             Log($"GameObjects found: {gameObjects.Length}");
 
             foreach (var gameObject in gameObjects)
             {
-                InjectProperties(gameObject);
+                try
+                {
+                    InjectProperties(gameObject);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception, gameObject);
+                }
             }
         }
     }
