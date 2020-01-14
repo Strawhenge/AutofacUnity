@@ -6,11 +6,16 @@ namespace Autofac.Unity
     {
         private static IContainer _container;
 
-        internal static IContainer Container => _container ?? throw new InvalidOperationException("Container has not been set");
+        internal static IContainer Container => _container ?? throw new InvalidOperationException("Autofac container has not been set");
 
-        public static void SetContainer(IContainer container)
-        {
-            _container = container;
-        }
+        internal static InformationLogger InformationLogger { get; private set; } = Logger.EmptyInformationLogger;
+
+        internal static ExceptionLogger ExceptionLogger { get; private set; } = Logger.UnityConsoleExceptionLogger;
+
+        public static void SetContainer(IContainer container) => _container = container;
+
+        public static void LogInformationOutput(InformationLogger logger) => InformationLogger = logger;
+
+        public static void LogExceptionOutput(ExceptionLogger logger) => ExceptionLogger = logger;
     }
 }

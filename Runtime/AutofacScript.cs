@@ -5,34 +5,30 @@ namespace Autofac.Unity
 {
     public class AutofacScript : MonoBehaviour
     {
-        public bool EnableLogs;
-
         private IContainer container;
+        private InformationLogger logInformation;
+        private ExceptionLogger logException;
 
         public void InjectProperties(GameObject gameObject)
         {
-            Log($"creating scope for {gameObject}");
+            logInformation(this, $"Creating scope for {gameObject}");
             var scope = container.BeginLifetimeScope(gameObject);
 
             foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
             {
-                Log($"injecting properties for {monoBehaviour}");
+                logInformation(this, $"Injecting properties for {monoBehaviour}");
                 scope.InjectUnsetProperties(monoBehaviour);
             }
-        }
-
-        private void Log(string message)
-        {
-            if (EnableLogs)
-                Debug.Log(message, this);
         }
 
         private void Awake()
         {
             container = AutofacUnity.Container;
+            logInformation = AutofacUnity.InformationLogger;
+            logException = AutofacUnity.ExceptionLogger;
 
             var gameObjects = gameObject.scene.GetRootGameObjects();
-            Log($"GameObjects found: {gameObjects.Length}");
+            logInformation(this, $"GameObjects found: {gameObjects.Length}");
 
             foreach (var gameObject in gameObjects)
             {
@@ -42,7 +38,7 @@ namespace Autofac.Unity
                 }
                 catch (Exception exception)
                 {
-                    Debug.LogException(exception, gameObject);
+                    logException(gameObject, exception);
                 }
             }
         }
