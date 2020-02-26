@@ -11,6 +11,8 @@ namespace Autofac.Unity
     {
         public static InformationLogger EmptyInformationLogger => (context, message) => { };
 
+        public static ExceptionLogger EmptyExceptionLogger => (context, exception) => { };
+
         public static InformationLogger UnityConsoleInformationLogger => (context, message) => Debug.Log(message, context);
 
         public static ExceptionLogger UnityConsoleExceptionLogger => (context, exception) => Debug.LogError(exception, context);

@@ -1,21 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Autofac.Unity
 {
     public static class AutofacUnity
     {
-        private static IContainer _container;
+        public static void SetContainer(IContainer container) => Context.Container = container;
 
-        internal static IContainer Container => _container ?? throw new InvalidOperationException("Autofac container has not been set");
+        public static void LogInformationOutput(InformationLogger logger) => Context.LogInformation = logger;
 
-        internal static InformationLogger InformationLogger { get; private set; } = Logger.EmptyInformationLogger;
+        public static void LogExceptionOutput(ExceptionLogger logger) => Context.LogException = logger;
 
-        internal static ExceptionLogger ExceptionLogger { get; private set; } = Logger.UnityConsoleExceptionLogger;
+        public static void InjectPropertiesForGameObject(GameObject gameObject)
+        {
+            Context.LogInformation(gameObject, $"Creating scope for {gameObject}");
+            var scope = Context.Container.BeginLifetimeScope(gameObject);
 
-        public static void SetContainer(IContainer container) => _container = container;
+            foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
+            {
+                Context.LogInformation(gameObject, $"Injecting properties for {monoBehaviour}");
+                scope.InjectUnsetProperties(monoBehaviour);
+            }
+        }
 
-        public static void LogInformationOutput(InformationLogger logger) => InformationLogger = logger;
-
-        public static void LogExceptionOutput(ExceptionLogger logger) => ExceptionLogger = logger;
+        public static void InjectPropertiesForGameObjects(IEnumerable<GameObject> gameObjects)
+        {
+            foreach (var gameObject in gameObjects)
+            {
+                try
+                {
+                    InjectPropertiesForGameObject(gameObject);
+                }
+                catch (Exception exception)
+                {
+                    Context.LogException(gameObject, exception);
+                }
+            }
+        }
     }
 }
