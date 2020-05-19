@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autofac.Core;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Autofac.Unity
@@ -9,15 +11,38 @@ namespace Autofac.Unity
 
         public static void SetContainer(IContainer container) => AutofacUnity.container = container;
 
-        public static void InjectPropertiesForGameObject(GameObject gameObject)
+        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject)
+        {
+            CreateScopeAndInjectMonobehaviourProperties(gameObject, injectStrategy: InjectMonobehaviourProperties);
+
+            void InjectMonobehaviourProperties(ILifetimeScope scope, MonoBehaviour monoBehaviour)
+            {
+                scope.InjectUnsetProperties(monoBehaviour);
+            }
+        }
+
+        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, params Parameter[] parameters) =>
+            InjectUnsetPropertiesForGameObject(gameObject, parameters as IEnumerable<Parameter>);
+
+        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, IEnumerable<Parameter> parameters)
+        {
+            CreateScopeAndInjectMonobehaviourProperties(gameObject, injectStrategy: InjectMonobehaviourProperties);
+
+            void InjectMonobehaviourProperties(ILifetimeScope scope, MonoBehaviour monoBehaviour)
+            {
+                scope.InjectUnsetProperties(monoBehaviour, parameters);
+            }
+        }
+
+        private static void CreateScopeAndInjectMonobehaviourProperties(GameObject gameObject, Action<ILifetimeScope, MonoBehaviour> injectStrategy)
         {
             AssureContainerIsSet();
 
-            var scope = container.BeginLifetimeScope(gameObject);
+            var scope = CreateScopeForGameObject(gameObject);
 
             foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
             {
-                scope.InjectUnsetProperties(monoBehaviour);
+                injectStrategy(scope, monoBehaviour);
             }
         }
 
@@ -27,6 +52,11 @@ namespace Autofac.Unity
             {
                 throw new InvalidOperationException("Autofac container has not been set");
             }
+        }
+
+        private static ILifetimeScope CreateScopeForGameObject(GameObject gameObject)
+        {
+            return container.BeginLifetimeScope(gameObject);
         }
     }
 }

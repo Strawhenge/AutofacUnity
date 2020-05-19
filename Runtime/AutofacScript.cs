@@ -11,7 +11,7 @@ namespace Autofac.Unity
             {
                 try
                 {
-                    AutofacUnity.InjectPropertiesForGameObject(gameObject);
+                    AutofacUnity.InjectUnsetPropertiesForGameObject(gameObject);
                 }
                 catch (Exception exception)
                 {
