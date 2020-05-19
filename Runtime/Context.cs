@@ -14,16 +14,6 @@ namespace Autofac.Unity
             set => container = value;
         }
 
-        public static InformationLogger LogInformation
-        {
-            get => logInformation ?? Logger.EmptyInformationLogger;
-            set => logInformation = value;
-        }
-
-        public static ExceptionLogger LogException
-        {
-            get => logException ?? Logger.EmptyExceptionLogger;
-            set => logException = value;
-        }
+       
     }
 }

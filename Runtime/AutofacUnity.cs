@@ -1,41 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Autofac.Unity
 {
     public static class AutofacUnity
     {
-        public static void SetContainer(IContainer container) => Context.Container = container;
+        private static IContainer container;
 
-        public static void LogInformationOutput(InformationLogger logger) => Context.LogInformation = logger;
-
-        public static void LogExceptionOutput(ExceptionLogger logger) => Context.LogException = logger;
+        public static void SetContainer(IContainer container) => AutofacUnity.container = container;
 
         public static void InjectPropertiesForGameObject(GameObject gameObject)
         {
-            Context.LogInformation(gameObject, $"Creating scope for {gameObject}");
-            var scope = Context.Container.BeginLifetimeScope(gameObject);
+            AssureContainerIsSet();
+
+            var scope = container.BeginLifetimeScope(gameObject);
 
             foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
             {
-                Context.LogInformation(gameObject, $"Injecting properties for {monoBehaviour}");
                 scope.InjectUnsetProperties(monoBehaviour);
             }
         }
 
-        public static void InjectPropertiesForGameObjects(IEnumerable<GameObject> gameObjects)
+        private static void AssureContainerIsSet()
         {
-            foreach (var gameObject in gameObjects)
+            if (container == null)
             {
-                try
-                {
-                    InjectPropertiesForGameObject(gameObject);
-                }
-                catch (Exception exception)
-                {
-                    Context.LogException(gameObject, exception);
-                }
+                throw new InvalidOperationException("Autofac container has not been set");
             }
         }
     }

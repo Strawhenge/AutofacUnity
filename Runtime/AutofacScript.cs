@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Autofac.Unity
 {
@@ -6,8 +7,18 @@ namespace Autofac.Unity
     {
         private void Awake()
         {
-            AutofacUnity.InjectPropertiesForGameObjects(
-                gameObject.scene.GetRootGameObjects());
+            foreach (var gameObject in gameObject.scene.GetRootGameObjects())
+            {
+                try
+                {
+                    AutofacUnity.InjectPropertiesForGameObject(gameObject);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogError(exception);
+                    Destroy(gameObject);                    
+                }
+            }
         }
     }
 }
