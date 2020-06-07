@@ -9,10 +9,10 @@ namespace Autofac.Unity
            context.Resolve<ILifetimeScope>();
 
         public static GameObject GetGameObject(this IComponentContext context) =>
-            context.GetScope()?.Tag as GameObject;
+            context.Resolve<GameObject>();
 
         public static T ResolveFromGameObject<T>(this IComponentContext context) where T : Object =>
-            context.GetGameObject()?.GetComponent<T>();
+            context.GetGameObject().GetComponent<T>();
 
         public static IRegistrationBuilder<T, SimpleActivatorData, SingleRegistrationStyle> RegisterTypeFromGameObject<T>(this ContainerBuilder builder) where T : Object =>
             builder.Register(x => x.ResolveFromGameObject<T>());

@@ -56,7 +56,10 @@ namespace Autofac.Unity
 
         private static ILifetimeScope CreateScopeForGameObject(GameObject gameObject)
         {
-            return container.BeginLifetimeScope(gameObject);
+            return container.BeginLifetimeScope(builder =>
+            {
+                builder.Register(_ => gameObject).As<GameObject>().InstancePerLifetimeScope();
+            });
         }
     }
 }

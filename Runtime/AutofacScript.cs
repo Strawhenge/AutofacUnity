@@ -7,8 +7,6 @@ namespace Autofac.Unity
     {
         private void Awake()
         {
-            AutofacUnity.SetLoggingContext(this);
-
             foreach (var gameObject in gameObject.scene.GetRootGameObjects())
             {
                 try
