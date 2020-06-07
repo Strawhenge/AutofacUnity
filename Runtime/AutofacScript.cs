@@ -7,6 +7,8 @@ namespace Autofac.Unity
     {
         private void Awake()
         {
+            AutofacUnity.SetLoggingContext(this);
+
             foreach (var gameObject in gameObject.scene.GetRootGameObjects())
             {
                 try
@@ -15,7 +17,7 @@ namespace Autofac.Unity
                 }
                 catch (Exception exception)
                 {
-                    Debug.LogError(exception);
+                    Debug.LogError(exception, this);
                     Destroy(gameObject);                    
                 }
             }
