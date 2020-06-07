@@ -1,10 +1,9 @@
 {
   "name": "com.autofacunity",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "displayName": "Autofac Unity",
-  "description": "",
-  "unity": "2019.1",   
+  "unity": "2019.1",
   "author": {
-    "name": "Matt Bristow"   
+    "name": "Matt Bristow"
   }
 }
