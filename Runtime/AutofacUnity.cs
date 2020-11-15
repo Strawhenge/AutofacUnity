@@ -8,7 +8,7 @@ namespace Autofac.Unity
 {
     public static class AutofacUnity
     {
-        public static void SetContainer(IContainer container) => GameObjectScopes.SetContainer(container);
+        public static void SetContainer(IContainer container) => Injector.Container = container;
 
         public static void InjectUnsetPropertiesForGameObject(GameObject gameObject) =>
             InjectUnsetPropertiesForGameObject(gameObject, Enumerable.Empty<Parameter>());
@@ -25,14 +25,7 @@ namespace Autofac.Unity
         public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, params Parameter[] parameters) =>
             InjectUnsetPropertiesForGameObject(gameObject, configurationAction, parameters as IEnumerable<Parameter>);
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, IEnumerable<Parameter> parameters)
-        {
-            var scope = GameObjectScopes.Create(gameObject, configurationAction);
-
-            foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
-            {
-                scope.InjectUnsetProperties(monoBehaviour, parameters);
-            }
-        }
-    }
+        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, IEnumerable<Parameter> parameters) =>
+            Injector.InjectUnsetPropertiesForGameObject(gameObject, configurationAction, parameters);
+    }   
 }
