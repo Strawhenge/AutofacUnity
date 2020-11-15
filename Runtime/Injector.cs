@@ -22,7 +22,8 @@ namespace Autofac.Unity
                     .Register(_ => gameObject)
                     .As<GameObject>()
                     .InstancePerLifetimeScope();
-              
+
+                TagDependencies.ExecuteConfigurationActionsForTag(gameObject.tag, builder);
                 configurationAction(builder);
             });
 

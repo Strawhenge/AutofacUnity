@@ -27,5 +27,8 @@ namespace Autofac.Unity
 
         public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, IEnumerable<Parameter> parameters) =>
             Injector.InjectUnsetPropertiesForGameObject(gameObject, configurationAction, parameters);
-    }   
+
+        public static void ForTag(string tag, Action<ContainerBuilder> configurationAction) =>
+            TagDependencies.AddConfigurationActionForTag(tag, configurationAction);
+    }
 }
