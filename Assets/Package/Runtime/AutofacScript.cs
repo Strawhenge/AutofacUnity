@@ -5,7 +5,7 @@ namespace Autofac.Unity
 {
     public class AutofacScript : MonoBehaviour
     {
-        [SerializeField] AutofacScope _scopeConfiguration;
+        [SerializeField] ScopeConfiguration _scopeConfiguration;
 
         void Awake()
         {
