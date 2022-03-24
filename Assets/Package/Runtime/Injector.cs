@@ -1,6 +1,7 @@
 using Autofac.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Autofac.Unity
@@ -14,7 +15,7 @@ namespace Autofac.Unity
             Action<ContainerBuilder> configurationAction,
             IEnumerable<Parameter> parameters)
         {
-            AssertContainerIsSet();
+            EnsureContainerIsSet();
 
             var scope = Container.BeginLifetimeScope(builder =>
             {
@@ -27,18 +28,23 @@ namespace Autofac.Unity
                 configurationAction(builder);
             });
 
-            foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
+            var ignore = gameObject
+                .GetComponentsInChildren<AutofacScript>(includeInactive: true)
+                .Where(x => x.gameObject != gameObject)
+                .SelectMany(x => x.GetComponentsInChildren<MonoBehaviour>(includeInactive: true))
+                .ToArray();
+
+            foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>(includeInactive: true))
             {
-                scope.InjectUnsetProperties(monoBehaviour, parameters);
+                if (!ignore.Contains(monoBehaviour))
+                    scope.InjectUnsetProperties(monoBehaviour, parameters);
             }
         }
 
-        private static void AssertContainerIsSet()
+        static void EnsureContainerIsSet()
         {
             if (Container == null)
-            {
-                throw new InvalidOperationException("Autofac container has not been set");
-            }
+                throw new InvalidOperationException("Autofac has not been configured.");
         }
     }
 }
