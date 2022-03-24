@@ -18,13 +18,14 @@ namespace Autofac.Unity.Tests
         [UnitySetUp]
         public IEnumerator LoadScene()
         {
-            var sceneLoad = EditorSceneManager.LoadSceneAsyncInPlayMode(scenePath, new LoadSceneParameters(LoadSceneMode.Additive));
+            DependencyInjection.Configure();
 
+            var sceneLoad = EditorSceneManager.LoadSceneAsyncInPlayMode(scenePath, new LoadSceneParameters(LoadSceneMode.Additive));
             sceneLoad.completed += _ =>
             {
                 _player = Object.FindObjectOfType<Player>();
             };
-            
+
             while (!sceneLoad.isDone)
                 yield return null;
         }
