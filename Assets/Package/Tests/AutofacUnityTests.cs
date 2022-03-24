@@ -11,8 +11,8 @@ namespace Autofac.Unity.Tests
 {
     public class AutofacUnityTests
     {
-        const string sceneName = "AutofacUnity";
-        const string scenePath = "Assets/Package/Tests/AutofacUnity.unity";
+        const string sceneName = "TestScene";
+        const string scenePath = "Assets/Package/Tests/TestScene.unity";
 
         Player _player;
         Item _playerItem;
