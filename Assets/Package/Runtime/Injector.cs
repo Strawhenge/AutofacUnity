@@ -1,6 +1,7 @@
 using Autofac.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Autofac.Unity
@@ -27,9 +28,16 @@ namespace Autofac.Unity
                 configurationAction(builder);
             });
 
+            var ignore = gameObject
+                .GetComponentsInChildren<AutofacScript>()
+                .Where(x => x.gameObject != gameObject)
+                .SelectMany(x => x.GetComponentsInChildren<MonoBehaviour>())
+                .ToArray();
+
             foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
             {
-                scope.InjectUnsetProperties(monoBehaviour, parameters);
+                if (!ignore.Contains(monoBehaviour))
+                    scope.InjectUnsetProperties(monoBehaviour, parameters);
             }
         }
 
