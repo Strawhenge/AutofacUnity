@@ -5,19 +5,16 @@ namespace Autofac.Unity
 {
     public class AutofacScript : MonoBehaviour
     {
-        private void Awake()
+        void Awake()
         {
-            foreach (var gameObject in gameObject.scene.GetRootGameObjects())
+            try
             {
-                try
-                {
-                    AutofacUnity.InjectUnsetPropertiesForGameObject(gameObject);
-                }
-                catch (Exception exception)
-                {
-                    Debug.LogError(exception, this);
-                    Destroy(gameObject);                    
-                }
+                AutofacUnity.InjectUnsetPropertiesForGameObject(gameObject);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError(exception, this);
+                Destroy(gameObject);
             }
         }
     }
