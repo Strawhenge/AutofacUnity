@@ -1,4 +1,5 @@
 ﻿using Autofac.Unity.Tests.Scripts;
+using Autofac.Unity.Tests.Services;
 using NUnit.Framework;
 using System.Collections;
 using UnityEditor.SceneManagement;
@@ -17,6 +18,7 @@ namespace Autofac.Unity.Tests
         Item _playerItem;
         Enemy _enemy;
         HitPoint _enemyHitPoint;
+        Vendor _vendor;
 
         [UnitySetUp]
         public IEnumerator LoadScene()
@@ -30,6 +32,7 @@ namespace Autofac.Unity.Tests
                 _playerItem = Object.FindObjectOfType<Item>();
                 _enemy = Object.FindObjectOfType<Enemy>();
                 _enemyHitPoint = _enemy.GetComponentInChildren<HitPoint>();
+                _vendor = Object.FindObjectOfType<Vendor>();
             };
 
             while (!sceneLoad.isDone)
@@ -86,6 +89,17 @@ namespace Autofac.Unity.Tests
         {
             Assert.True(
                 ReferenceEquals(_player.TimeAccessor, _enemy.TimeAccessor));
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator PropertiesShouldBeInjectedInAccordanceToScopeConfiguration()
+        {
+            Assert.IsInstanceOf<Inventory>(_player.Inventory);
+            Assert.IsInstanceOf<Inventory>(_enemy.Inventory);
+
+            Assert.IsInstanceOf<VendorInventory>(_vendor.Inventory);
 
             yield return null;
         }
