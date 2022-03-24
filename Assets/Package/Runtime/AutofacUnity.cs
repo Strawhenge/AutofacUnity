@@ -16,8 +16,6 @@ namespace Autofac.Unity
             Injector.Container = builder.Build();
         }
 
-        public static void SetContainer(IContainer container) => Injector.Container = container;
-
         public static void InjectUnsetPropertiesForGameObject(GameObject gameObject) =>
             InjectUnsetPropertiesForGameObject(gameObject, Enumerable.Empty<Parameter>());
 

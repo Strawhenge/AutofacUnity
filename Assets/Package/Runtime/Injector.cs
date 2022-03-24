@@ -15,7 +15,7 @@ namespace Autofac.Unity
             Action<ContainerBuilder> configurationAction,
             IEnumerable<Parameter> parameters)
         {
-            AssertContainerIsSet();
+            EnsureContainerIsSet();
 
             var scope = Container.BeginLifetimeScope(builder =>
             {
@@ -41,12 +41,10 @@ namespace Autofac.Unity
             }
         }
 
-        private static void AssertContainerIsSet()
+        static void EnsureContainerIsSet()
         {
             if (Container == null)
-            {
-                throw new InvalidOperationException("Autofac container has not been set");
-            }
+                throw new InvalidOperationException("Autofac has not been configured.");
         }
     }
 }
