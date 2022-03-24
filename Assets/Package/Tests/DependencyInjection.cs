@@ -8,7 +8,9 @@ namespace Autofac.Unity.Tests
         {
             AutofacUnity.Configure(builder =>
             {
-                builder.RegisterType<Inventory>().AsSelf();
+                builder.RegisterType<Inventory>().AsSelf().InstancePerLifetimeScope();
+                builder.RegisterType<Health>().AsSelf().InstancePerLifetimeScope();
+
                 builder.RegisterType<TimeAccessor>().AsSelf().SingleInstance();
             });
         }

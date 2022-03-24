@@ -15,6 +15,7 @@ namespace Autofac.Unity.Tests
 
         Player _player;
         Enemy _enemy;
+        HitPoint _enemyHitPoint;
 
         [UnitySetUp]
         public IEnumerator LoadScene()
@@ -26,6 +27,7 @@ namespace Autofac.Unity.Tests
             {
                 _player = Object.FindObjectOfType<Player>();
                 _enemy = Object.FindObjectOfType<Enemy>();
+                _enemyHitPoint = _enemy.GetComponentInChildren<HitPoint>();
             };
 
             while (!sceneLoad.isDone)
@@ -42,7 +44,13 @@ namespace Autofac.Unity.Tests
         public IEnumerator PropertiesShouldBeInjected()
         {
             Assert.NotNull(_player.Inventory);
+            Assert.NotNull(_player.TimeAccessor);
+
             Assert.NotNull(_enemy.Inventory);
+            Assert.NotNull(_enemy.TimeAccessor);
+            Assert.NotNull(_enemy.Health);
+
+            Assert.NotNull(_enemyHitPoint.Health);
 
             yield return null;
         }
@@ -52,6 +60,9 @@ namespace Autofac.Unity.Tests
         {
             Assert.False(
                 ReferenceEquals(_player.Inventory, _enemy.Inventory));
+
+            Assert.True(
+                ReferenceEquals(_enemy.Health, _enemyHitPoint.Health));
 
             yield return null;
         }
