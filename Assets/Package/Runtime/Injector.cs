@@ -29,12 +29,12 @@ namespace Autofac.Unity
             });
 
             var ignore = gameObject
-                .GetComponentsInChildren<AutofacScript>()
+                .GetComponentsInChildren<AutofacScript>(includeInactive: true)
                 .Where(x => x.gameObject != gameObject)
-                .SelectMany(x => x.GetComponentsInChildren<MonoBehaviour>())
+                .SelectMany(x => x.GetComponentsInChildren<MonoBehaviour>(includeInactive: true))
                 .ToArray();
 
-            foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>())
+            foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>(includeInactive: true))
             {
                 if (!ignore.Contains(monoBehaviour))
                     scope.InjectUnsetProperties(monoBehaviour, parameters);
