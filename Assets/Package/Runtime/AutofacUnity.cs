@@ -8,6 +8,14 @@ namespace Autofac.Unity
 {
     public static class AutofacUnity
     {
+        public static void Configure(Action<ContainerBuilder> buildAction)
+        {
+            var builder = new ContainerBuilder();
+            buildAction(builder);
+
+            Injector.Container = builder.Build();
+        }
+
         public static void SetContainer(IContainer container) => Injector.Container = container;
 
         public static void InjectUnsetPropertiesForGameObject(GameObject gameObject) =>

@@ -6,13 +6,11 @@ namespace Autofac.Unity.Tests
     {
         public static void Configure()
         {
-            var builder = new ContainerBuilder();
-
-            builder.RegisterType<Inventory>().AsSelf();
-
-            builder.RegisterType<TimeAccessor>().AsSelf().SingleInstance();
-
-            AutofacUnity.SetContainer(builder.Build());
+            AutofacUnity.Configure(builder =>
+            {
+                builder.RegisterType<Inventory>().AsSelf();
+                builder.RegisterType<TimeAccessor>().AsSelf().SingleInstance();
+            });
         }
     }
 }
