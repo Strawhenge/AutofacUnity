@@ -14,6 +14,7 @@ namespace Autofac.Unity.Tests
         const string scenePath = "Assets/Package/Tests/AutofacUnity.unity";
 
         Player _player;
+        Item _playerItem;
         Enemy _enemy;
         HitPoint _enemyHitPoint;
 
@@ -26,6 +27,7 @@ namespace Autofac.Unity.Tests
             sceneLoad.completed += _ =>
             {
                 _player = Object.FindObjectOfType<Player>();
+                _playerItem = Object.FindObjectOfType<Item>();
                 _enemy = Object.FindObjectOfType<Enemy>();
                 _enemyHitPoint = _enemy.GetComponentInChildren<HitPoint>();
             };
@@ -44,7 +46,10 @@ namespace Autofac.Unity.Tests
         public IEnumerator PropertiesShouldBeInjected()
         {
             Assert.NotNull(_player.Inventory);
+            Assert.NotNull(_player.Health);
             Assert.NotNull(_player.TimeAccessor);
+
+            Assert.NotNull(_playerItem.Health);
 
             Assert.NotNull(_enemy.Inventory);
             Assert.NotNull(_enemy.TimeAccessor);
@@ -63,6 +68,15 @@ namespace Autofac.Unity.Tests
 
             Assert.True(
                 ReferenceEquals(_enemy.Health, _enemyHitPoint.Health));
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator ScopedPropertiesShouldBeUniqueByNestedScope()
+        {
+            Assert.False(
+                ReferenceEquals(_player.Health, _playerItem.Health));
 
             yield return null;
         }
