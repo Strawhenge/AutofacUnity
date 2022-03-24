@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  workflow_dispatch:  
+        
+jobs: 
+  Release:    
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Git
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+        
+    - name: Release
+      run: |        
+        git --version
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"   
+        git checkout -b temp-${{ github.run_number }}
+        echo "`jq '.version="2.0.${{ github.run_number }}"' 'Assets/Package/package.json'`" > 'Assets/Package/package.json'
+        git mv 'Assets/Package/Samples' 'Assets/Package/Samples~'
+        git rm 'Assets/Package/Samples.meta'
+        git add .
+        git commit -m'Prepare Release ${{ github.run_number }}'
+        git push --set-upstream origin temp-${{ github.run_number }}
+        git push --delete origin release
+        git checkout -b release
+        git push --set-upstream origin release
+        git push --delete origin temp-${{ github.run_number }}
