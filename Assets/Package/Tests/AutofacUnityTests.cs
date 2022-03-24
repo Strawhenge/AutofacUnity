@@ -14,6 +14,7 @@ namespace Autofac.Unity.Tests
         const string scenePath = "Assets/Package/Tests/AutofacUnity.unity";
 
         Player _player;
+        Enemy _enemy;
 
         [UnitySetUp]
         public IEnumerator LoadScene()
@@ -24,6 +25,7 @@ namespace Autofac.Unity.Tests
             sceneLoad.completed += _ =>
             {
                 _player = Object.FindObjectOfType<Player>();
+                _enemy = Object.FindObjectOfType<Enemy>();
             };
 
             while (!sceneLoad.isDone)
@@ -40,6 +42,26 @@ namespace Autofac.Unity.Tests
         public IEnumerator PropertiesShouldBeInjected()
         {
             Assert.NotNull(_player.Inventory);
+            Assert.NotNull(_enemy.Inventory);
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator ScopedPropertiesShouldBeUniqueByScope()
+        {
+            Assert.False(
+                ReferenceEquals(_player.Inventory, _enemy.Inventory));
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator SingletonPropertiesShouldBeTheSame()
+        {
+            Assert.True(
+                ReferenceEquals(_player.TimeAccessor, _enemy.TimeAccessor));
+
             yield return null;
         }
     }

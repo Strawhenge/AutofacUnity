@@ -1,18 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Autofac.Unity.Tests.Services;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+namespace Autofac.Unity.Tests.Scripts
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Enemy : MonoBehaviour
     {
-        
-    }
+        public Inventory Inventory { get; set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public TimeAccessor TimeAccessor { get; set; }
     }
 }
