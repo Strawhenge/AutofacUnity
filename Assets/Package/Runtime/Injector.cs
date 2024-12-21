@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Autofac.Unity
 {
-    internal static class Injector
+    static class Injector
     {
         public static IContainer Container { get; set; }
 
@@ -34,10 +34,11 @@ namespace Autofac.Unity
                 .SelectMany(x => x.GetComponentsInChildren<MonoBehaviour>(includeInactive: true))
                 .ToArray();
 
+            var propertiesParameters = parameters.ToArray();
             foreach (var monoBehaviour in gameObject.GetComponentsInChildren<MonoBehaviour>(includeInactive: true))
             {
                 if (!ignore.Contains(monoBehaviour))
-                    scope.InjectUnsetProperties(monoBehaviour, parameters);
+                    scope.InjectUnsetProperties(monoBehaviour, propertiesParameters);
             }
         }
 

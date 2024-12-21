@@ -23,6 +23,6 @@ namespace Autofac.Unity
 
         public static IRegistrationBuilder<T, SimpleActivatorData, SingleRegistrationStyle> RegisterTypeFromScene<T>(
             this ContainerBuilder builder) where T : Object =>
-            builder.Register(x => Object.FindObjectOfType<T>()).InstancePerLifetimeScope();
+            builder.Register(_ => Object.FindObjectOfType<T>()).InstancePerLifetimeScope();
     }
 }

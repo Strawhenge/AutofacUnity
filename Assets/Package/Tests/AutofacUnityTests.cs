@@ -11,8 +11,8 @@ namespace Autofac.Unity.Tests
 {
     public class AutofacUnityTests
     {
-        const string sceneName = "TestScene";
-        const string scenePath = "Assets/Package/Tests/TestScene.unity";
+        const string SceneName = "TestScene";
+        const string ScenePath = "Assets/Package/Tests/TestScene.unity";
 
         Player _player;
         Item _playerItem;
@@ -25,7 +25,7 @@ namespace Autofac.Unity.Tests
         {
             DependencyInjection.Configure();
 
-            var sceneLoad = EditorSceneManager.LoadSceneAsyncInPlayMode(scenePath, new LoadSceneParameters(LoadSceneMode.Additive));
+            var sceneLoad = EditorSceneManager.LoadSceneAsyncInPlayMode(ScenePath, new LoadSceneParameters(LoadSceneMode.Additive));
             sceneLoad.completed += _ =>
             {
                 _player = Object.FindObjectOfType<Player>();
@@ -42,7 +42,7 @@ namespace Autofac.Unity.Tests
         [UnityTearDown]
         public IEnumerator UnloadScene()
         {
-            yield return SceneManager.UnloadSceneAsync(sceneName);
+            yield return SceneManager.UnloadSceneAsync(SceneName);
         }
 
         [UnityTest]

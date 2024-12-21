@@ -3,26 +3,25 @@ using System.Collections.Generic;
 
 namespace Autofac.Unity
 {
-    internal static class TagDependencies
+    static class TagDependencies
     {
-        private static readonly Dictionary<string, List<Action<ContainerBuilder>>> configurationActionsByTag = new Dictionary<string, List<Action<ContainerBuilder>>>();
+        static readonly Dictionary<string, List<Action<ContainerBuilder>>> ConfigurationActionsByTag = new();
 
         public static void AddConfigurationActionForTag(string tag, Action<ContainerBuilder> configurationAction)
         {
-            if (!configurationActionsByTag.ContainsKey(tag))
-                configurationActionsByTag.Add(tag, new List<Action<ContainerBuilder>>());
+            if (!ConfigurationActionsByTag.ContainsKey(tag))
+                ConfigurationActionsByTag.Add(tag, new List<Action<ContainerBuilder>>());
 
-            configurationActionsByTag[tag].Add(configurationAction);
+            ConfigurationActionsByTag[tag].Add(configurationAction);
         }
 
         public static void ExecuteConfigurationActionsForTag(string tag, ContainerBuilder builder)
         {
-            if (!configurationActionsByTag.ContainsKey(tag)) return;
+            if (!ConfigurationActionsByTag.TryGetValue(tag, out var configurationActions))
+                return;
 
-            foreach (var configurationAction in configurationActionsByTag[tag])
-            {
+            foreach (var configurationAction in configurationActions)
                 configurationAction(builder);
-            }
         }
     }
 }
