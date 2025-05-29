@@ -10,7 +10,7 @@ namespace Autofac.Unity
     {
         public static IContainer Container { get; set; }
 
-        public static void InjectUnsetPropertiesForGameObject(
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(
             GameObject gameObject,
             Action<ContainerBuilder> configurationAction,
             IEnumerable<Parameter> parameters)
@@ -40,6 +40,8 @@ namespace Autofac.Unity
                 if (!ignore.Contains(monoBehaviour))
                     scope.InjectUnsetProperties(monoBehaviour, propertiesParameters);
             }
+
+            return scope;
         }
 
         static void EnsureContainerIsSet()

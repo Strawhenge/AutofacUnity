@@ -25,7 +25,8 @@ namespace Autofac.Unity.Tests
         {
             DependencyInjection.Configure();
 
-            var sceneLoad = EditorSceneManager.LoadSceneAsyncInPlayMode(ScenePath, new LoadSceneParameters(LoadSceneMode.Additive));
+            var sceneLoad =
+                EditorSceneManager.LoadSceneAsyncInPlayMode(ScenePath, new LoadSceneParameters(LoadSceneMode.Additive));
             sceneLoad.completed += _ =>
             {
                 _player = Object.FindObjectOfType<Player>();
@@ -101,6 +102,20 @@ namespace Autofac.Unity.Tests
 
             Assert.IsInstanceOf<VendorInventory>(_vendor.Inventory);
 
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator AddedScriptsShouldInjectUsingSameScope()
+        {
+            var autofacScript = _player.GetComponent<AutofacScript>();
+            var addedHitPoint = _player.gameObject.AddComponent<HitPoint>();
+
+            autofacScript.AddToScope(addedHitPoint);
+
+            Assert.True(
+                ReferenceEquals(_player.Health, addedHitPoint.Health));
+            
             yield return null;
         }
     }

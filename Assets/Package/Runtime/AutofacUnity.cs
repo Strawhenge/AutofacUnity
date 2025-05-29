@@ -16,22 +16,22 @@ namespace Autofac.Unity
             Injector.Container = builder.Build();
         }
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject) =>
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(GameObject gameObject) =>
             InjectUnsetPropertiesForGameObject(gameObject, Enumerable.Empty<Parameter>());
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, params Parameter[] parameters) =>
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(GameObject gameObject, params Parameter[] parameters) =>
             InjectUnsetPropertiesForGameObject(gameObject, parameters as IEnumerable<Parameter>);
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, IEnumerable<Parameter> parameters) =>
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(GameObject gameObject, IEnumerable<Parameter> parameters) =>
             InjectUnsetPropertiesForGameObject(gameObject, _ => { }, parameters);
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction) =>
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction) =>
          InjectUnsetPropertiesForGameObject(gameObject, configurationAction, Enumerable.Empty<Parameter>());
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, params Parameter[] parameters) =>
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, params Parameter[] parameters) =>
             InjectUnsetPropertiesForGameObject(gameObject, configurationAction, parameters as IEnumerable<Parameter>);
 
-        public static void InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, IEnumerable<Parameter> parameters) =>
+        public static ILifetimeScope InjectUnsetPropertiesForGameObject(GameObject gameObject, Action<ContainerBuilder> configurationAction, IEnumerable<Parameter> parameters) =>
             Injector.InjectUnsetPropertiesForGameObject(gameObject, configurationAction, parameters);
 
         public static void ForTag(string tag, Action<ContainerBuilder> configurationAction) =>

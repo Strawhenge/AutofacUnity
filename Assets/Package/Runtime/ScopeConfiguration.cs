@@ -4,6 +4,6 @@ namespace Autofac.Unity
 {
     public abstract class ScopeConfiguration : ScriptableObject
     {
-        internal protected abstract void Configure(ContainerBuilder builder);
+        protected internal abstract void Configure(ContainerBuilder builder);
     }
 }
