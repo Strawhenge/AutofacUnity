@@ -111,11 +111,29 @@ namespace Autofac.Unity.Tests
             var autofacScript = _player.GetComponent<AutofacScript>();
             var addedHitPoint = _player.gameObject.AddComponent<HitPoint>();
 
-            autofacScript.AddToScope(addedHitPoint);
+            autofacScript.AddScriptToScope(addedHitPoint);
 
             Assert.True(
                 ReferenceEquals(_player.Health, addedHitPoint.Health));
-            
+
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator AddedGameObjectsShouldInjectUsingSameScope()
+        {
+            var autofacScript = _player.GetComponent<AutofacScript>();
+
+            var addedGameObject = new GameObject();
+            addedGameObject.transform.SetParent(_player.transform);
+
+            var addedHitPoint = addedGameObject.AddComponent<HitPoint>();
+
+            autofacScript.AddGameObjectToScope(addedGameObject);
+
+            Assert.True(
+                ReferenceEquals(_player.Health, addedHitPoint.Health));
+
             yield return null;
         }
     }
