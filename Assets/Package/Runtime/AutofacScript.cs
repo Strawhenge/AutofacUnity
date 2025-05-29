@@ -15,6 +15,10 @@ namespace Autofac.Unity
                 : AutofacUnity.InjectUnsetPropertiesForGameObject(gameObject, _scopeConfiguration.Configure);
         }
 
-        public void AddToScope(MonoBehaviour script) => _scope.InjectUnsetProperties(script);
+        public void AddToScope(MonoBehaviour script) =>
+            _scope.InjectUnsetPropertiesForGameObject(script.gameObject);
+
+        public void AddToScope(GameObject gameObject) =>
+            _scope.InjectUnsetPropertiesForGameObject(gameObject);
     }
 }
